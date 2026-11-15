@@ -1,0 +1,12 @@
+services:
+  bifrost:
+    image: maximhq/bifrost:latest
+    container_name: asof-bifrost
+    ports:
+      - "8088:8080"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - BIFROST_ENCRYPTION_KEY=${BIFROST_ENCRYPTION_KEY}
+    restart: unless-stopped

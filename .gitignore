@@ -1,0 +1,31 @@
+# deps / build
+node_modules/
+.next/
+out/
+dist/
+coverage/
+*.tsbuildinfo
+
+# env / secrets
+.env
+.env.local
+.env.*.local
+
+# bifrost runtime state (keep the committed config.json template)
+data/*
+!data/config.json
+
+# os / editor
+.DS_Store
+*.log
+
+# agent / build docs must never enter the repo (backstop — they live in ../Global AI-private/)
+WIN-DECISION.md
+GITHUB-CRAWL.md
+PLAN.md
+CLAIMS.md
+CHECKLIST.md
+CLAUDE.md
+.claude/
+ship/
+video-script.md
