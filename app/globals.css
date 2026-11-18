@@ -296,6 +296,34 @@ textarea:focus {
   font-size: 13px;
 }
 
+.reviewed-panel {
+  margin-top: 14px;
+}
+.reviewed-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.reviewed-head strong {
+  font-size: 15px;
+}
+.reviewed-sub {
+  display: block;
+  color: var(--muted-2);
+  font-size: 13px;
+  margin-top: 3px;
+  max-width: 48ch;
+}
+textarea.reviewed {
+  min-height: 182px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
 .try-label {
   font-size: 12px;
   color: var(--muted-2);

@@ -316,6 +316,10 @@ function Results({
         />
       ))}
 
+      {result.claims.length > 0 && (
+        <ReviewedAnswer result={result} decisions={decisions} />
+      )}
+
       {result.routes.length > 0 && (
         <div className="routes">
           <span>Routed through Bifrost gateway:</span>
@@ -406,4 +410,94 @@ function hostOf(url: string): string {
   } catch {
     return url;
   }
+}
+
+/**
+ * The outcome in the reviewer's hands: the original answer, unchanged, with a
+ * dated freshness note appended per claim (verdict → source → the reviewer's
+ * Keep/Dismiss choice). AsOf never rewrites the answer, so this annotates rather
+ * than edits — the reviewer pastes it straight back into their doc or ticket.
+ */
+function buildReviewedAnswer(
+  result: AnalysisResult,
+  decisions: Record<string, "kept" | "dismissed">,
+): string {
+  const o = result.overall;
+  const asOf = result.createdAt ? result.createdAt.slice(0, 10) : "";
+  const lines: string[] = [result.input.trim(), ""];
+  lines.push(
+    `— AsOf freshness review${asOf ? ` (as of ${asOf})` : ""}: ${o.score}/100, ${o.verdict} —`,
+  );
+  for (const c of result.claims) {
+    const d = decisions[c.id];
+    const tag =
+      c.verdict === "fresh"
+        ? "FRESH"
+        : c.verdict === "stale"
+          ? "STALE"
+          : "REVIEW";
+    const note =
+      c.verdict === "stale"
+        ? ` → ${c.explanation}`
+        : c.verdict === "unverifiable"
+          ? " → no conclusive live source; verify manually"
+          : " → still current";
+    const src = c.sourceUrl
+      ? ` (source: ${hostOf(c.sourceUrl)}${c.sourceDate ? ", " + c.sourceDate : ""})`
+      : "";
+    const mark =
+      d === "dismissed"
+        ? " [removed by reviewer]"
+        : d === "kept"
+          ? " [kept by reviewer]"
+          : "";
+    lines.push(`• [${tag}] "${c.assertion}"${note}${src}${mark}`);
+  }
+  return lines.join("\n");
+}
+
+function ReviewedAnswer({
+  result,
+  decisions,
+}: {
+  result: AnalysisResult;
+  decisions: Record<string, "kept" | "dismissed">;
+}) {
+  const [copied, setCopied] = useState(false);
+  const textVal = buildReviewedAnswer(result, decisions);
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(textVal);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      // Clipboard blocked (e.g. insecure context): the textarea is selected
+      // so the reviewer can copy manually.
+      setCopied(false);
+    }
+  }
+
+  return (
+    <div className="panel reviewed-panel">
+      <div className="reviewed-head">
+        <div>
+          <strong>Reviewed answer</strong>
+          <span className="reviewed-sub">
+            the original answer with a dated freshness note per claim — copy it
+            back into your doc or ticket.
+          </span>
+        </div>
+        <button className="btn small primary" type="button" onClick={copy}>
+          {copied ? "✓ Copied" : "Copy reviewed answer"}
+        </button>
+      </div>
+      <textarea
+        className="reviewed"
+        readOnly
+        value={textVal}
+        onFocus={(e) => e.currentTarget.select()}
+      />
+    </div>
+  );
 }
