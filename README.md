@@ -1,5 +1,15 @@
 # AsOf — catch stale claims in AI answers
 
+[![CI](https://github.com/Osiyomeoh/asof/actions/workflows/ci.yml/badge.svg)](https://github.com/Osiyomeoh/asof/actions/workflows/ci.yml)
+
+Priya, a developer-support engineer, pastes an AI-drafted reply about a competitor's
+API price into a customer ticket — the model's training is months old, the price moved
+last week, and the wrong number ships under her name. She isn't rare: **63% of senior
+professionals say they've unknowingly acted on outdated information from an AI tool**
+([GWI survey of 1,883 professionals, Nov 2026](https://letsdatascience.com/news/gwi-survey-finds-58-of-leaders-acted-on-wrong-ai-insight-100f1836)) —
+on a tool ChatGPT alone puts in [800M hands a week](https://techcrunch.com/2025/10/06/sam-altman-says-chatgpt-has-hit-800m-weekly-active-users/)
+(OpenAI, Oct 2025).
+
 **AsOf finds the one outdated claim buried in an AI-generated answer — a changed
 price, a deprecated API version, a superseded regulation — and proves it against
 a live web source, before the wrong number reaches a customer.**

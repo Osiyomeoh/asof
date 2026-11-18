@@ -12,7 +12,7 @@ export const SAMPLE_INPUT = `Here's a quick rundown:
 
 - The latest and most capable Gemini model is Gemini 2.0 Flash, released in December 2024.
 - OpenAI's gpt-4o-mini costs $0.15 per 1M input tokens.
-- Node.js 20 is the current Long-Term Support (LTS) release, so target that.
+- Stripe is a private company most recently valued at about $65 billion.
 - Under the EU AI Act, obligations for providers of general-purpose AI models begin to apply in August 2025.`;
 
 const claims: ClaimResult[] = [
@@ -74,26 +74,28 @@ const claims: ClaimResult[] = [
   {
     id: "c3",
     claimId: "c3",
-    type: "api-version",
-    subject: "Node.js LTS version",
-    assertion: "Node.js 20 is the current Long-Term Support (LTS) release.",
-    whyTimeSensitive: "Node promotes a new LTS line every year; the old one ages out.",
-    searchQuery: "current Node.js LTS version 2026",
+    type: "company-fact",
+    subject: "Stripe — company valuation",
+    assertion:
+      "Stripe is a private company most recently valued at about $65 billion.",
+    whyTimeSensitive:
+      "Private-company valuations reset at each funding round and date quickly.",
+    searchQuery: "Stripe latest company valuation",
     verdict: "stale",
     freshnessScore: 22,
     explanation:
-      "A newer Node.js line is the active LTS now; Node 20 has moved to maintenance.",
+      "Stripe has been repriced in later funding, so the $65 billion figure is out of date.",
     evidenceQuote:
-      "The active LTS line has advanced past Node 20, which is now in maintenance.",
-    sourceUrl: "https://nodejs.org/en/about/previous-releases",
-    sourceDate: "2026-10-01",
+      "Stripe's valuation has moved beyond the $65 billion mark in more recent funding.",
+    sourceUrl: "https://stripe.com/newsroom",
+    sourceDate: "2026-09-10",
     sources: [
       {
-        title: "Node.js releases — active and maintenance LTS",
-        url: "https://nodejs.org/en/about/previous-releases",
+        title: "Stripe raises new round at a higher valuation",
+        url: "https://stripe.com/newsroom",
         content:
-          "The current active LTS line is newer than Node 20, which has entered maintenance.",
-        publishedDate: "2026-10-01",
+          "Stripe's most recent funding values the company above the earlier $65 billion mark.",
+        publishedDate: "2026-09-10",
         score: 0.88,
       },
     ],
