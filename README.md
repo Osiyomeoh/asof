@@ -72,7 +72,9 @@ Two LLM calls, one web-search fan-out, and a deterministic safety layer:
   **`unverifiable`** — never `fresh`. Being unsure is safe; being wrongly confident is not.
   (`lib/judge.ts` → `reconcile()`, unit-tested in `test/reconcile.test.ts`.)
 - **Flag, don't rewrite.** AsOf never edits the answer. It flags each claim and a
-  human clicks **Keep** or **Dismiss**. The person stays in the loop.
+  human clicks **Keep** or **Dismiss**. The person stays in the loop — then copies
+  out a **reviewed answer**: the original text with a dated, sourced freshness note
+  per claim and their Keep/Dismiss choices, ready to paste back into a doc or ticket.
 - **Every verdict is traceable.** A `fresh`/`stale` verdict always carries a source
   URL, its publish date, and a quote from it. No floating assertions.
 
