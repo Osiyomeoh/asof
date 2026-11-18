@@ -10,6 +10,17 @@ model was trained can be quietly, confidently wrong today. AsOf is a freshness l
 paste an answer, and it tells you which claims are still true **as of today** — and
 which have gone stale — with the source and date for every verdict.
 
+## What it looks like
+
+Paste an AI answer; AsOf pulls out the time-sensitive claims and checks each one:
+
+![AsOf landing — paste an AI-generated answer to check it against the live web](docs/screenshots/asof-landing.jpg)
+
+Every claim gets a freshness verdict with a dated source, plus one overall score — here
+two of four claims are flagged stale, with the superseding fact quoted and linked:
+
+![AsOf results — an overall freshness score with per-claim fresh/stale verdicts, each citing a dated web source](docs/screenshots/asof-results.jpg)
+
 Built for the **Global AI Hackathon** on both sponsor technologies:
 
 - **[Bifrost by Maxim AI](https://github.com/maximhq/bifrost)** — a self-hosted,
