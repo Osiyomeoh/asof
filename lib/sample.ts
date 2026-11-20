@@ -12,7 +12,7 @@ export const SAMPLE_INPUT = `Here's a quick rundown:
 
 - The latest and most capable Gemini model is Gemini 2.0 Flash, released in December 2024.
 - OpenAI's gpt-4o-mini costs $0.15 per 1M input tokens.
-- Stripe is a private company most recently valued at about $65 billion.
+- Apple's CEO is Tim Cook.
 - Under the EU AI Act, obligations for providers of general-purpose AI models begin to apply in August 2025.`;
 
 const claims: ClaimResult[] = [
@@ -75,28 +75,29 @@ const claims: ClaimResult[] = [
     id: "c3",
     claimId: "c3",
     type: "company-fact",
-    subject: "Stripe company valuation",
-    assertion:
-      "Stripe is a private company most recently valued at about $65 billion.",
+    subject: "Apple CEO (company leadership)",
+    assertion: "Apple's CEO is Tim Cook.",
     whyTimeSensitive:
-      "Private-company valuations reset at each funding round and date quickly.",
-    searchQuery: "Stripe latest company valuation",
+      "Leadership changes, and models keep naming a long-serving CEO after a succession.",
+    searchQuery: "who is Apple CEO now 2026",
     verdict: "stale",
-    freshnessScore: 22,
+    freshnessScore: 8,
     explanation:
-      "Stripe has been repriced in later funding, so the $65 billion figure is out of date.",
+      "Tim Cook moved to executive chairman and John Ternus became Apple's CEO effective September 1, 2026, so Cook is no longer CEO.",
     evidenceQuote:
-      "Stripe's valuation has moved beyond the $65 billion mark in more recent funding.",
-    sourceUrl: "https://stripe.com/newsroom",
-    sourceDate: "2026-09-10",
+      "Apple named John Ternus CEO effective September 1, 2026; Tim Cook became executive chairman.",
+    sourceUrl:
+      "https://www.apple.com/newsroom/2026/04/tim-cook-to-become-apple-executive-chairman-john-ternus-to-become-apple-ceo/",
+    sourceDate: "2026-04-20",
     sources: [
       {
-        title: "Stripe raises new round at a higher valuation",
-        url: "https://stripe.com/newsroom",
+        title:
+          "Tim Cook to become Apple executive chairman; John Ternus to become Apple CEO",
+        url: "https://www.apple.com/newsroom/2026/04/tim-cook-to-become-apple-executive-chairman-john-ternus-to-become-apple-ceo/",
         content:
-          "Stripe's most recent funding values the company above the earlier $65 billion mark.",
-        publishedDate: "2026-09-10",
-        score: 0.88,
+          "Apple announced that John Ternus will become chief executive officer effective September 1, 2026, with Tim Cook moving to executive chairman of the board.",
+        publishedDate: "2026-04-20",
+        score: 0.97,
       },
     ],
   },
