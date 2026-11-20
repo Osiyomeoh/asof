@@ -27,7 +27,10 @@ Paste an AI answer; AsOf pulls out the time-sensitive claims and checks each one
 ![AsOf landing — paste an AI-generated answer to check it against the live web](docs/screenshots/asof-landing.jpg)
 
 Every claim gets a freshness verdict with a dated source, plus one overall score — here
-two of four claims are flagged stale, with the superseding fact quoted and linked:
+two of four claims are flagged stale, with the superseding fact quoted and linked. Each
+claim also carries a **time axis** — *as written → out of date (or still current) as of
+today* — so the one thing AsOf measures, whether a claim has survived to **now**, is
+visible at a glance, not buried in prose:
 
 ![AsOf results — an overall freshness score with per-claim fresh/stale verdicts, each citing a dated web source](docs/screenshots/asof-results.jpg)
 
@@ -118,8 +121,10 @@ bash scripts/spike.sh           # prints GO when Bifrost + Tavily both return re
 1. `npm install && npm run dev`, open `http://localhost:3000`.
 2. Click **Try a sample** — see 4 claims scored: 2 stale (red), 1 fresh (green),
    1 unverifiable (amber). The amber one is the safe-fail guard refusing to guess.
-3. Scroll to the footer: **"Routed through Bifrost gateway"** shows the real route
-   for the extract and judge steps.
+3. Read any claim's **time axis** — *as written → out of date / still current as of
+   today*, with the live source's own date beside it. Then scroll to the footer: the
+   **Bifrost** gateway docket shows the real route for the extract and judge steps, and
+   credits Tavily for the dated evidence. Both sponsors are load-bearing, and the UI says so.
 4. For live proof, add keys (Option B) and run the **"Outdated model + pricing"**
    example. It flags *"Gemini 2.0 Flash is the latest model"* as **stale**, citing a
    news source dated within the last few days — newer than any LLM's training data.
@@ -138,7 +143,7 @@ bash scripts/spike.sh           # prints GO when Bifrost + Tavily both return re
 | Score 0–100 per claim + overall verdict | `lib/aggregate.ts` | `npm test -- aggregate` |
 | Defensive JSON parsing of model output | `lib/llm.ts` | `npm test -- extractJson` |
 | Zero-key sample mode | `lib/sample.ts` | `npm test -- sample` |
-| Flag, never rewrite (human Keep/Dismiss) | `app/page.tsx` | open `/`, run a sample, use the buttons |
+| Flag, never rewrite (human Keep/Dismiss + reviewed-answer export) | `app/page.tsx` | open `/`, run a sample, use **Keep/Dismiss**, then **Copy reviewed answer** |
 
 ```bash
 npm run typecheck && npm test && npm run build   # all green

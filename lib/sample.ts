@@ -57,7 +57,7 @@ const claims: ClaimResult[] = [
     freshnessScore: 86,
     explanation:
       "Current pricing pages still list gpt-4o-mini at $0.15 per 1M input tokens.",
-    evidenceQuote: "gpt-4o-mini — $0.15 / 1M input tokens.",
+    evidenceQuote: "gpt-4o-mini: $0.15 / 1M input tokens.",
     sourceUrl: "https://openai.com/api/pricing/",
     sourceDate: "2026-10-20",
     sources: [
@@ -75,7 +75,7 @@ const claims: ClaimResult[] = [
     id: "c3",
     claimId: "c3",
     type: "company-fact",
-    subject: "Stripe — company valuation",
+    subject: "Stripe company valuation",
     assertion:
       "Stripe is a private company most recently valued at about $65 billion.",
     whyTimeSensitive:
@@ -104,7 +104,7 @@ const claims: ClaimResult[] = [
     id: "c4",
     claimId: "c4",
     type: "regulation",
-    subject: "EU AI Act — general-purpose AI obligations",
+    subject: "EU AI Act, general-purpose AI obligations",
     assertion:
       "Under the EU AI Act, obligations for providers of general-purpose AI models begin to apply in August 2025.",
     whyTimeSensitive:
@@ -152,7 +152,7 @@ export function getSampleResult(input?: string): AnalysisResult {
     ],
     createdAt: new Date().toISOString(),
     notes: [
-      "Sample mode — offline fixture data, shown so the demo runs with zero keys.",
+      "Sample mode: offline fixture data, shown so the demo runs with zero keys.",
     ],
   };
 }

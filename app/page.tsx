@@ -10,7 +10,7 @@ const EXAMPLES: { label: string; text: string }[] = [
   },
   {
     label: "Framework versions",
-    text: "Use Next.js 14 with the app router — it's the current stable major. React 18 is the latest release. For styling, Tailwind CSS v3 is the version to install.",
+    text: "Use Next.js 14 with the app router; it's the current stable major. React 18 is the latest release. For styling, Tailwind CSS v3 is the version to install.",
   },
   {
     label: "Company facts",
@@ -88,6 +88,31 @@ export default function Home() {
 
   return (
     <main className="container">
+      {/* Stamped-ink filter: a gentle fractal displacement gives the verdict
+          stamps a hand-pressed, uneven-ink edge instead of a crisp vector box. */}
+      <svg
+        width="0"
+        height="0"
+        aria-hidden="true"
+        style={{ position: "absolute", pointerEvents: "none" }}
+      >
+        <filter id="stamp-ink" x="-15%" y="-15%" width="130%" height="130%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.04 0.05"
+            numOctaves="2"
+            seed="7"
+            result="noise"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale="1.6"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </svg>
       <header className="hero">
         <div className="eyebrow">
           <span className="d" />
@@ -143,8 +168,8 @@ export default function Home() {
         </div>
         <p className="tag">
           Paste an AI-generated answer. AsOf finds the <strong>time-sensitive
-          claims</strong> — prices, model and API versions, regulations, company
-          facts — and checks each against the live web, so you catch what&apos;s
+          claims</strong> (prices, model and API versions, regulations, company
+          facts) and checks each against the live web, so you catch what&apos;s
           gone stale <strong>as of today</strong>.
         </p>
         {today && (
@@ -158,7 +183,7 @@ export default function Home() {
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Paste an AI answer here — e.g. a ChatGPT reply about pricing, model names, or library versions…"
+          placeholder="Paste an AI answer here, e.g. a ChatGPT reply about pricing, model names, or library versions…"
         />
         <div className="row" style={{ marginTop: 12 }}>
           <button
@@ -177,7 +202,7 @@ export default function Home() {
           </button>
           {!live && (
             <span className="note" style={{ marginTop: 0 }}>
-              No API keys detected — results use the offline sample.
+              No API keys detected. Results use the offline sample.
             </span>
           )}
         </div>
@@ -211,7 +236,7 @@ export default function Home() {
         />
       )}
 
-      <footer className="routes" style={{ marginTop: 40, opacity: 0.7 }}>
+      <footer className="pagefoot">
         <span>
           AsOf · claims are flagged, never rewritten · you decide what to keep.
         </span>
@@ -249,6 +274,23 @@ function FreshnessDial({ score, verdict }: { score: number; verdict: string }) {
   return (
     <div className="dial">
       <svg viewBox="0 0 100 100" width="104" height="104">
+        <g className="dial-ticks">
+          {Array.from({ length: 20 }).map((_, i) => {
+            const a = (i * 2 * Math.PI) / 20;
+            const outer = 49;
+            const inner = i % 5 === 0 ? 43.5 : 46;
+            return (
+              <line
+                key={i}
+                x1={50 + outer * Math.cos(a)}
+                y1={50 + outer * Math.sin(a)}
+                x2={50 + inner * Math.cos(a)}
+                y2={50 + inner * Math.sin(a)}
+                strokeWidth={i % 5 === 0 ? 1 : 0.5}
+              />
+            );
+          })}
+        </g>
         <circle className="dial-track" cx="50" cy="50" r={r} />
         <circle
           className="dial-arc"
@@ -302,7 +344,8 @@ function Results({
 
       {result.claims.length === 0 && (
         <div className="panel note" style={{ marginTop: 10 }}>
-          No time-sensitive claims were found in this text — nothing to go stale.
+          No time-sensitive claims were found in this text, so nothing can go
+          stale.
         </div>
       )}
 
@@ -311,6 +354,7 @@ function Results({
           key={c.id}
           claim={c}
           index={i}
+          today={result.createdAt ? result.createdAt.slice(0, 10) : ""}
           decision={decisions[c.id]}
           onDecide={onDecide}
         />
@@ -321,14 +365,43 @@ function Results({
       )}
 
       {result.routes.length > 0 && (
-        <div className="routes">
-          <span>Routed through Bifrost gateway:</span>
-          {result.routes.map((r) => (
-            <span className="gw" key={r.step}>
-              {r.step} → {r.provider}/{r.model}
-              {r.attempts > 1 ? ` (retry ${r.attempts})` : ""}
-            </span>
-          ))}
+        <div className="gateway">
+          <div className="gw-head">
+            <span className="gw-mark">Bifrost</span>
+            <span className="gw-by">by Maxim AI · model gateway</span>
+          </div>
+          <p className="gw-note">
+            Both model steps, claim extraction and the freshness judgment, run
+            through one self-hosted, OpenAI-compatible Bifrost endpoint. The app
+            asks for a model by name; the gateway handles routing, retries and
+            provider fallback, so AsOf can switch models without a code change.
+          </p>
+          <div className="gw-rows">
+            {result.routes.map((r) => (
+              <div className="gw-row" key={r.step}>
+                <span className="gw-step">{r.step}</span>
+                <span className="gw-served">
+                  {r.provider}/{r.model}
+                </span>
+                {r.requestedModel &&
+                  r.requestedModel !== `${r.provider}/${r.model}` && (
+                    <span className="gw-fallback">
+                      requested {r.requestedModel}
+                    </span>
+                  )}
+                <span className="gw-att">
+                  {r.attempts > 1 ? `retry x${r.attempts}` : "1 call"}
+                  {typeof r.latencyMs === "number"
+                    ? ` · ${r.latencyMs}ms`
+                    : ""}
+                </span>
+              </div>
+            ))}
+          </div>
+          <p className="gw-tavily">
+            Live evidence and publish dates retrieved with{" "}
+            <strong>Tavily</strong> web search.
+          </p>
         </div>
       )}
 
@@ -344,14 +417,24 @@ function Results({
 function ClaimCard({
   claim,
   index,
+  today,
   decision,
   onDecide,
 }: {
   claim: ClaimResult;
   index: number;
+  today: string;
   decision?: "kept" | "dismissed";
   onDecide: (id: string, d: "kept" | "dismissed") => void;
 }) {
+  const verdictWord =
+    claim.verdict === "stale"
+      ? "out of date"
+      : claim.verdict === "fresh"
+        ? "still current"
+        : "unconfirmed";
+  const srcAgo =
+    claim.sourceDate && today ? agoPhrase(claim.sourceDate, today) : "";
   return (
     <article
       className={`claim ${claim.verdict} ${
@@ -367,6 +450,19 @@ function ClaimCard({
       <p className={`assertion ${decision === "dismissed" ? "struck" : ""}`}>
         {claim.assertion}
       </p>
+      <div className={`whenline ${claim.verdict}`}>
+        <span className="wl-written">as written</span>
+        <span className="wl-axis" aria-hidden="true" />
+        <span className="wl-verdict">
+          {verdictWord}
+          {today ? ` as of ${fmtDate(today)}` : ""}
+        </span>
+        <span className="wl-src">
+          {claim.sourceDate
+            ? `live source ${fmtDate(claim.sourceDate)}${srcAgo ? ` · ${srcAgo}` : ""}`
+            : "no dated source found"}
+        </span>
+      </div>
       {claim.whyTimeSensitive && (
         <p className="why">Why it can go stale: {claim.whyTimeSensitive}</p>
       )}
@@ -412,11 +508,41 @@ function hostOf(url: string): string {
   }
 }
 
+const MONTHS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+
+// "2026-09-30" -> "30 Sep 2026"; passes anything unparseable straight through.
+function fmtDate(iso: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso);
+  if (!m) return iso;
+  const [, y, mo, d] = m;
+  const name = MONTHS[Number(mo) - 1];
+  return name ? `${Number(d)} ${name} ${y}` : iso;
+}
+
+// How far the live source predates the check date, in plain words. Empty if the
+// source is dated after the check or either date is unparseable.
+function agoPhrase(dateStr: string, today: string): string {
+  const a = Date.parse(dateStr);
+  const b = Date.parse(today);
+  if (Number.isNaN(a) || Number.isNaN(b)) return "";
+  const days = Math.round((b - a) / 86_400_000);
+  if (days < 0) return "";
+  if (days === 0) return "today";
+  if (days < 14) return `${days} day${days === 1 ? "" : "s"} ago`;
+  if (days < 70) return `${Math.round(days / 7)} weeks ago`;
+  return `${Math.round(days / 30)} months ago`;
+}
+
 /**
- * The outcome in the reviewer's hands: the original answer, unchanged, with a
- * dated freshness note appended per claim (verdict → source → the reviewer's
- * Keep/Dismiss choice). AsOf never rewrites the answer, so this annotates rather
- * than edits — the reviewer pastes it straight back into their doc or ticket.
+ * The outcome in the reviewer's hands: the original answer, unchanged, followed
+ * by a dated freshness review. Each claim becomes a short, scannable block (its
+ * subject, the exact claim, the finding, the source, and the reviewer's
+ * Keep/Dismiss choice) so it reads like a note a colleague left, not a log line.
+ * AsOf never rewrites the answer, so this annotates rather than edits: the
+ * reviewer pastes it straight back into their doc or ticket.
  */
 function buildReviewedAnswer(
   result: AnalysisResult,
@@ -425,35 +551,55 @@ function buildReviewedAnswer(
   const o = result.overall;
   const asOf = result.createdAt ? result.createdAt.slice(0, 10) : "";
   const lines: string[] = [result.input.trim(), ""];
+
+  // Header: score, overall verdict, and a plain-English tally of the claims.
+  const tally: string[] = [];
+  if (o.fresh) tally.push(`${o.fresh} current`);
+  if (o.stale) tally.push(`${o.stale} stale`);
+  if (o.unverifiable) tally.push(`${o.unverifiable} to review`);
+  lines.push(`AsOf freshness review${asOf ? ` (as of ${asOf})` : ""}`);
   lines.push(
-    `— AsOf freshness review${asOf ? ` (as of ${asOf})` : ""}: ${o.score}/100, ${o.verdict} —`,
+    `Overall freshness: ${o.score}/100 (${o.verdict}).` +
+      (tally.length ? ` Of ${o.total} claims: ${tally.join(", ")}.` : ""),
   );
-  for (const c of result.claims) {
+  lines.push("");
+
+  result.claims.forEach((c, i) => {
     const d = decisions[c.id];
-    const tag =
+    const label =
       c.verdict === "fresh"
         ? "FRESH"
         : c.verdict === "stale"
           ? "STALE"
-          : "REVIEW";
-    const note =
-      c.verdict === "stale"
-        ? ` → ${c.explanation}`
+          : "NEEDS REVIEW";
+    const finding =
+      (c.explanation || "").trim() ||
+      (c.verdict === "stale"
+        ? "This looks out of date."
         : c.verdict === "unverifiable"
-          ? " → no conclusive live source; verify manually"
-          : " → still current";
-    const src = c.sourceUrl
-      ? ` (source: ${hostOf(c.sourceUrl)}${c.sourceDate ? ", " + c.sourceDate : ""})`
-      : "";
-    const mark =
-      d === "dismissed"
-        ? " [removed by reviewer]"
-        : d === "kept"
-          ? " [kept by reviewer]"
-          : "";
-    lines.push(`• [${tag}] "${c.assertion}"${note}${src}${mark}`);
-  }
-  return lines.join("\n");
+          ? "No conclusive live source was found."
+          : "Still current as of this check.");
+
+    lines.push(`${i + 1}. [${label}] ${c.subject}`);
+    lines.push(`   "${c.assertion}"`);
+    lines.push(
+      `   ${finding}${
+        c.verdict === "unverifiable" ? " Worth verifying manually." : ""
+      }`,
+    );
+    if (c.sourceUrl) {
+      lines.push(
+        `   Source: ${hostOf(c.sourceUrl)}${
+          c.sourceDate ? ` (${c.sourceDate})` : ""
+        }`,
+      );
+    }
+    if (d === "kept") lines.push("   Reviewer: kept.");
+    else if (d === "dismissed") lines.push("   Reviewer: removed from the answer.");
+    lines.push("");
+  });
+
+  return lines.join("\n").trimEnd() + "\n";
 }
 
 function ReviewedAnswer({
@@ -484,7 +630,7 @@ function ReviewedAnswer({
         <div>
           <strong>Reviewed answer</strong>
           <span className="reviewed-sub">
-            the original answer with a dated freshness note per claim — copy it
+            the original answer with a dated freshness note per claim. Copy it
             back into your doc or ticket.
           </span>
         </div>

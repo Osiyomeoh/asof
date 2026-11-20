@@ -1,81 +1,59 @@
-:root {
-  --bg: #0a0a0f;
-  --bg-2: #0e0e16;
-  --panel: #14141d;
-  --panel-2: #1b1b26;
-  --border: #272735;
-  --border-2: #34344a;
-  --text: #f1f1f6;
-  --muted: #9a9aad;
-  --muted-2: #6e6e82;
-  --accent: #8b7bff;
-  --accent-2: #a594ff;
-  --fresh: #30d090;
-  --stale: #ff5d6c;
-  --unverified: #f6ad3c;
-  --radius: 14px;
-  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
+/* ============================================================================
+   AsOf — "Wire Desk"
+   Concept: a fact-checker's desk. Each AI claim is a slip of wire copy,
+   stamped with a dated verdict. Source world: newsroom wire copy, ledgers,
+   notary/received date stamps. Light newsprint by day; ink on paper.
+   Shape logic: 2px corners, 1.5px ink rules, no shadows. One spot colour
+   (stamp red), reserved for the masthead rule and the "stale" stamp.
+   ========================================================================== */
 
-/* ---------- light theme ---------- */
+:root,
 :root[data-theme="light"] {
-  --bg: #f6f6fb;
-  --bg-2: #ffffff;
-  --panel: #ffffff;
-  --panel-2: #f2f2f7;
-  --border: #e4e4ee;
-  --border-2: #d3d3e0;
-  --text: #16161d;
-  --muted: #56566a;
-  --muted-2: #8a8a9c;
-  --accent: #6a5bff;
-  --accent-2: #5544e0;
-  --fresh: #0f9d63;
-  --stale: #e0323f;
-  --unverified: #b9720a;
-}
-:root[data-theme="light"] body {
-  background:
-    radial-gradient(
-      1100px 520px at 50% -220px,
-      rgba(106, 91, 255, 0.1),
-      transparent 70%
-    ),
-    radial-gradient(
-      760px 380px at 85% 6%,
-      rgba(15, 157, 99, 0.05),
-      transparent 70%
-    ),
-    var(--bg);
-}
-:root[data-theme="light"] .hero h1 {
-  background: linear-gradient(180deg, #14141c, #5544e0);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  /* paper + ink (warm, never pure grey) */
+  --paper: oklch(0.963 0.014 83);
+  --slip: oklch(0.992 0.006 83);
+  --inset: oklch(0.945 0.016 83);
+  --ink: oklch(0.255 0.015 66);
+  --ink-2: oklch(0.44 0.013 66);
+  --ink-3: oklch(0.6 0.011 66);
+  --rule: oklch(0.255 0.015 66 / 0.16);
+  --rule-2: oklch(0.255 0.015 66 / 0.34);
+
+  /* verdict inks — flat, documentary, inside the palette */
+  --fresh: oklch(0.5 0.1 150);
+  --stale: oklch(0.525 0.19 28);
+  --unverified: oklch(0.58 0.12 74);
+
+  /* the single spot colour: the stamp red (= stale, the product's whole job) */
+  --accent: var(--stale);
+
+  --radius: 2px;
+
+  --font-display: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-plex-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo,
+    Consolas, monospace;
+
+  --press: 160ms cubic-bezier(0.2, 0.9, 0.2, 1.3);
+  --settle: 200ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-.theme-toggle {
-  margin-left: auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--panel);
-  color: var(--muted);
-  transition:
-    color 0.15s,
-    border-color 0.15s,
-    background 0.15s;
-}
-.theme-toggle:hover {
-  color: var(--text);
-  border-color: var(--accent);
+/* dark = the late desk: a warm dark board, not a neon console */
+:root[data-theme="dark"] {
+  --paper: oklch(0.205 0.012 70);
+  --slip: oklch(0.245 0.013 70);
+  --inset: oklch(0.185 0.012 70);
+  --ink: oklch(0.905 0.012 83);
+  --ink-2: oklch(0.72 0.011 83);
+  --ink-3: oklch(0.56 0.011 83);
+  --rule: oklch(0.905 0.012 83 / 0.16);
+  --rule-2: oklch(0.905 0.012 83 / 0.32);
+
+  --fresh: oklch(0.72 0.11 150);
+  --stale: oklch(0.68 0.17 30);
+  --unverified: oklch(0.78 0.12 80);
+  --accent: var(--stale);
 }
 
 * {
@@ -86,35 +64,60 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: var(--bg);
-  color: var(--text);
+  /* never let a long token or wide element scroll the page sideways */
+  overflow-x: hidden;
+  background: var(--paper);
+  color: var(--ink);
   font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
 }
 
 body {
-  background:
-    radial-gradient(
-      1100px 520px at 50% -200px,
-      rgba(139, 123, 255, 0.16),
-      transparent 70%
-    ),
-    radial-gradient(
-      800px 400px at 85% 8%,
-      rgba(48, 208, 144, 0.06),
-      transparent 70%
-    ),
-    var(--bg);
   min-height: 100vh;
+  /* a faint warm wash so the paper has light, not a flat fill */
+  background-image:
+    radial-gradient(
+      120% 80% at 50% -10%,
+      oklch(1 0.01 85 / 0.5),
+      transparent 60%
+    ),
+    radial-gradient(
+      100% 60% at 50% 115%,
+      oklch(0.2 0.02 60 / 0.05),
+      transparent 55%
+    );
+  background-attachment: fixed;
+}
+
+/* newsprint grain — real paper tooth, extremely faint, never a grid */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:root[data-theme="dark"] body::before {
+  mix-blend-mode: screen;
+  opacity: 0.05;
 }
 
 a {
-  color: var(--accent-2);
-  text-decoration: none;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--rule-2);
 }
 a:hover {
-  text-decoration: underline;
+  text-decoration-color: var(--accent);
 }
 
 button {
@@ -122,135 +125,198 @@ button {
   cursor: pointer;
 }
 
-.container {
-  max-width: 940px;
-  margin: 0 auto;
-  padding: 40px 16px 96px;
+::selection {
+  background: var(--accent);
+  color: var(--paper);
 }
 
-/* ---------- hero ---------- */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.container {
+  max-width: 912px;
+  margin: 0 auto;
+  /* fluid gutters: 14px on a phone, up to 28px on a wide screen */
+  padding: clamp(24px, 5vw, 40px) clamp(14px, 4vw, 28px) 96px;
+}
+
+/* ---------- masthead / hero ---------------------------------------------- */
 .hero {
-  margin-bottom: 22px;
+  padding-bottom: 20px;
+  margin-bottom: 26px;
+  border-bottom: 1.5px solid var(--ink);
+  position: relative;
 }
+/* the second masthead rule, a hair below the first */
+.hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 4px;
+  height: 1px;
+  background: var(--ink);
+}
+
 .eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 14px;
-}
-.eyebrow .d {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 12px var(--accent);
-}
-.hero-top {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 9px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-bottom: 20px;
+}
+.eyebrow .d {
+  width: 8px;
+  height: 8px;
+  border-radius: 0; /* a register square, not a glowing dot */
+  background: var(--accent);
+}
+
+.hero-top {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
   flex-wrap: wrap;
 }
 .hero h1 {
   font-family: var(--font-display);
-  font-size: 46px;
-  font-weight: 700;
+  font-size: clamp(42px, 9vw, 72px);
+  font-weight: 500;
+  font-optical-sizing: auto;
   margin: 0;
-  letter-spacing: -0.03em;
-  background: linear-gradient(180deg, #ffffff, #c9c6e8);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  letter-spacing: -0.025em;
+  line-height: 0.9;
+  color: var(--ink);
+  border-bottom: 4px solid var(--accent); /* the masthead's spot rule */
+  padding-bottom: 2px;
 }
+
 .hero .tag {
-  color: var(--muted);
-  font-size: 16.5px;
-  margin: 14px 0 0;
-  max-width: 660px;
+  color: var(--ink-2);
+  font-size: clamp(15.5px, 1.4vw, 18px);
   line-height: 1.6;
+  margin: 20px 0 0;
+  max-width: 64ch;
 }
 .hero .tag strong {
-  color: var(--text);
-  font-weight: 600;
-}
-.asof {
-  margin-top: 14px;
-  font-size: 13px;
-  color: var(--muted-2);
-  font-variant-numeric: tabular-nums;
-}
-.asof b {
-  color: var(--muted);
+  color: var(--ink);
   font-weight: 600;
 }
 
+/* the signature "as of" stamp — a received-date mark */
+.asof {
+  margin-top: 20px;
+  display: inline-block;
+  max-width: 100%;
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 2.6vw, 11.5px);
+  font-weight: 500;
+  letter-spacing: clamp(0.06em, 0.5vw, 0.14em);
+  text-transform: uppercase;
+  color: var(--ink-2);
+  border: 1.5px solid var(--rule-2);
+  border-radius: var(--radius);
+  padding: 7px 12px;
+  transform: rotate(-1.4deg);
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--rule);
+  filter: url(#stamp-ink);
+}
+.asof b {
+  color: var(--ink);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* status tags (live / sample) — a desk slug, not a pill */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  font-size: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
   font-weight: 500;
-  padding: 4px 11px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--panel);
-  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border: 1.5px solid var(--rule-2);
+  border-radius: var(--radius);
+  color: var(--ink-2);
+  align-self: center;
 }
 .badge .dot {
   width: 7px;
   height: 7px;
-  border-radius: 50%;
-  background: var(--muted);
+  border-radius: 0;
+  background: currentColor;
 }
-.badge.live .dot {
-  background: var(--fresh);
-  box-shadow: 0 0 0 0 rgba(48, 208, 144, 0.6);
-  animation: pulse 2s infinite;
+.badge.live {
+  color: var(--fresh);
+  border-color: color-mix(in oklch, var(--fresh) 55%, var(--rule));
 }
-.badge.sample .dot {
-  background: var(--unverified);
-}
-@keyframes pulse {
-  70% {
-    box-shadow: 0 0 0 6px rgba(48, 208, 144, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(48, 208, 144, 0);
-  }
+.badge.sample {
+  color: var(--unverified);
+  border-color: color-mix(in oklch, var(--unverified) 55%, var(--rule));
 }
 
-/* ---------- input panel ---------- */
-.panel {
-  background: var(--panel);
-  border: 1px solid var(--border);
+.theme-toggle {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
   border-radius: var(--radius);
-  padding: 18px;
+  border: 1.5px solid var(--rule-2);
+  background: transparent;
+  color: var(--ink-2);
+  align-self: center;
+  transition:
+    color 120ms,
+    border-color 120ms;
 }
+.theme-toggle:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+/* ---------- the desk slip (input panel) ---------------------------------- */
+.panel {
+  background: var(--slip);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 20px;
+  /* a low, warm paper lift — physical depth, never a glow */
+  box-shadow: 0 1px 0 oklch(1 0 0 / 0.5) inset, 0 10px 24px -18px
+      oklch(0.2 0.02 60 / 0.55);
+}
+
 textarea {
   width: 100%;
-  min-height: 156px;
+  min-height: 150px;
   resize: vertical;
-  padding: 15px;
-  border-radius: 11px;
-  background: var(--panel-2);
-  color: var(--text);
-  border: 1px solid var(--border);
-  font: inherit;
-  line-height: 1.55;
-  transition: border-color 0.15s;
+  padding: 15px 16px;
+  border-radius: var(--radius);
+  background: var(--inset);
+  color: var(--ink);
+  border: 1.5px solid var(--rule-2);
+  font-family: var(--font-body);
+  font-size: 15.5px;
+  line-height: 1.6;
+  transition: border-color 120ms;
 }
 textarea::placeholder {
-  color: var(--muted-2);
+  color: var(--ink-3);
 }
 textarea:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(139, 123, 255, 0.18);
+  border-color: var(--ink);
 }
 
 .row {
@@ -259,140 +325,178 @@ textarea:focus {
   flex-wrap: wrap;
   align-items: center;
 }
+
 .btn {
-  padding: 10px 17px;
-  border-radius: 10px;
-  border: 1px solid var(--border-2);
-  background: var(--panel-2);
-  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13px;
   font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--ink);
+  background: var(--slip);
+  color: var(--ink);
   transition:
-    transform 0.08s,
-    border-color 0.15s,
-    background 0.15s;
+    background 120ms,
+    color 120ms,
+    transform 90ms;
 }
 .btn:hover:not(:disabled) {
-  border-color: var(--muted-2);
+  background: var(--inset);
 }
 .btn:active:not(:disabled) {
   transform: translateY(1px);
 }
 .btn.primary {
-  background: linear-gradient(180deg, var(--accent-2), var(--accent));
-  border-color: transparent;
-  color: #fff;
-  font-weight: 600;
-  box-shadow: 0 6px 20px -8px rgba(139, 123, 255, 0.8);
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
 }
 .btn.primary:hover:not(:disabled) {
-  filter: brightness(1.06);
+  background: var(--ink-2);
 }
 .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: default;
 }
 .btn.small {
-  padding: 6px 12px;
-  font-size: 13px;
-}
-
-.reviewed-panel {
-  margin-top: 14px;
-}
-.reviewed-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-}
-.reviewed-head strong {
-  font-size: 15px;
-}
-.reviewed-sub {
-  display: block;
-  color: var(--muted-2);
-  font-size: 13px;
-  margin-top: 3px;
-  max-width: 48ch;
-}
-textarea.reviewed {
-  min-height: 182px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 12.5px;
-  line-height: 1.5;
+  padding: 7px 12px;
+  font-size: 12px;
 }
 
 .try-label {
-  font-size: 12px;
-  color: var(--muted-2);
-  margin: 14px 0 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 18px 0 0;
 }
 .chips {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 .chip {
-  font-size: 12.5px;
+  font-family: var(--font-mono);
+  font-size: 12px;
   padding: 7px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--panel-2);
-  color: var(--muted);
+  border-radius: var(--radius);
+  border: 1.5px solid var(--rule-2);
+  background: transparent;
+  color: var(--ink-2);
   transition:
-    color 0.15s,
-    border-color 0.15s;
+    color 120ms,
+    border-color 120ms;
 }
 .chip:hover:not(:disabled) {
-  color: var(--text);
-  border-color: var(--accent);
+  color: var(--ink);
+  border-color: var(--ink);
 }
 .chip:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: default;
 }
 
-/* ---------- overall verdict ---------- */
-.overall {
-  display: flex;
-  gap: 20px;
-  align-items: center;
+.note {
+  color: var(--ink-3);
+  font-size: 13px;
+  margin-top: 10px;
+}
+.err {
+  border: 1.5px solid var(--stale);
+  border-left-width: 4px;
+  color: var(--stale);
+  background: color-mix(in oklch, var(--stale) 9%, var(--slip));
   border-radius: var(--radius);
-  padding: 20px 22px;
-  border: 1px solid var(--border);
-  margin: 24px 0 16px;
-  animation: fadeUp 0.5s ease both;
-}
-.overall.STALE {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 93, 108, 0.1),
-    rgba(255, 93, 108, 0.03)
-  );
-  border-color: rgba(255, 93, 108, 0.38);
-}
-.overall.FRESH {
-  background: linear-gradient(
-    180deg,
-    rgba(48, 208, 144, 0.1),
-    rgba(48, 208, 144, 0.03)
-  );
-  border-color: rgba(48, 208, 144, 0.38);
-}
-.overall.NEEDS\ REVIEW,
-.overall.NEEDS {
-  background: linear-gradient(
-    180deg,
-    rgba(246, 173, 60, 0.1),
-    rgba(246, 173, 60, 0.03)
-  );
-  border-color: rgba(246, 173, 60, 0.38);
+  padding: 11px 14px;
+  margin-top: 14px;
+  font-size: 14px;
 }
 
-/* dial */
+/* ---------- the docket (overall verdict) --------------------------------- */
+.overall {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  background: var(--slip);
+  border: 1.5px solid var(--ink);
+  border-top-width: 6px; /* the heavy dateline rule across the top */
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin: 30px 0 20px;
+  box-shadow: 0 1px 0 oklch(1 0 0 / 0.5) inset, 0 12px 28px -20px
+      oklch(0.2 0.02 60 / 0.6);
+  animation: slip-in var(--settle) both;
+}
+.overall.STALE {
+  border-top-color: var(--stale);
+}
+.overall.FRESH {
+  border-top-color: var(--fresh);
+}
+.overall.NEEDS {
+  border-top-color: var(--unverified);
+}
+
+.overall > div {
+  min-width: 0;
+}
+.overall .v {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 5vw, 34px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  text-transform: uppercase;
+  filter: url(#stamp-ink); /* inked, letterpressed */
+}
+.overall.STALE .v {
+  color: var(--stale);
+}
+.overall.FRESH .v {
+  color: var(--fresh);
+}
+.overall.NEEDS .v {
+  color: var(--unverified);
+}
+.overall .h {
+  color: var(--ink-2);
+  margin-top: 7px;
+  font-size: 15px;
+  line-height: 1.5;
+  max-width: 46ch;
+}
+.counts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-left: auto;
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-left: 1.5px solid var(--rule);
+  padding-left: 18px;
+  white-space: nowrap;
+}
+.counts span {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  color: var(--ink-2);
+}
+.counts b {
+  font-weight: 600;
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+  min-width: 1.1em;
+  text-align: right;
+}
+
+/* the freshness gauge — an inked ring, no glow */
 .dial {
   position: relative;
   width: 104px;
@@ -402,16 +506,19 @@ textarea.reviewed {
 .dial svg {
   transform: rotate(-90deg);
 }
+.dial-ticks line {
+  stroke: var(--ink-3);
+  opacity: 0.5;
+}
 .dial-track {
   fill: none;
-  stroke: var(--border-2);
-  stroke-width: 8;
+  stroke: var(--rule);
+  stroke-width: 6;
 }
 .dial-arc {
   fill: none;
-  stroke-width: 8;
-  stroke-linecap: round;
-  filter: drop-shadow(0 0 6px currentColor);
+  stroke-width: 6;
+  stroke-linecap: butt; /* a measured tick, not a rounded bubble */
 }
 .dial-num {
   position: absolute;
@@ -422,63 +529,30 @@ textarea.reviewed {
   justify-content: center;
 }
 .dial-num strong {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 32px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 .dial-num span {
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.06em;
-  margin-top: 3px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: 5px;
 }
 
-.overall .v {
-  font-family: var(--font-display);
-  font-size: 21px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-}
-.overall .h {
-  color: var(--muted);
-  margin-top: 3px;
-  font-size: 14px;
-  line-height: 1.45;
-  max-width: 420px;
-}
-.counts {
-  display: flex;
-  gap: 16px;
-  margin-left: auto;
-  font-size: 13px;
-  align-self: flex-start;
-}
-.counts span {
-  display: flex;
-  align-items: baseline;
-  gap: 5px;
-}
-.counts b {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 17px;
-}
-
-/* ---------- claim cards ---------- */
+/* ---------- wire slips (claim cards) ------------------------------------- */
 .claim {
-  border: 1px solid var(--border);
+  background: var(--slip);
+  border: 1.5px solid var(--rule-2);
   border-left-width: 4px;
-  border-radius: 11px;
-  padding: 15px 17px;
-  margin: 11px 0;
-  background: var(--panel);
-  animation: fadeUp 0.5s ease both;
-  transition:
-    opacity 0.2s,
-    border-color 0.15s;
+  border-radius: var(--radius);
+  padding: 16px 18px 18px;
+  margin: 10px 0;
+  animation: slip-in var(--settle) both;
 }
 .claim.stale {
   border-left-color: var(--stale);
@@ -490,152 +564,370 @@ textarea.reviewed {
   border-left-color: var(--unverified);
 }
 .claim.dismissed {
-  opacity: 0.4;
+  opacity: 0.5;
 }
-@keyframes fadeUp {
+
+.claim .top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* THE SIGNATURE: a rubber verdict stamp — mono, double-ruled, pressed askew */
+.pill {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border: 1.5px solid currentColor;
+  border-radius: var(--radius);
+  box-shadow: 0 0 0 2px var(--slip), 0 0 0 3px currentColor;
+  transform: rotate(-2.4deg);
+  transform-origin: center;
+  filter: url(#stamp-ink); /* uneven, hand-pressed ink edge */
+  animation: stamp var(--press) both;
+  animation-delay: inherit;
+}
+.pill.stale {
+  color: var(--stale);
+}
+.pill.fresh {
+  color: var(--fresh);
+  transform: rotate(1.8deg);
+}
+.pill.unverifiable {
+  color: var(--unverified);
+  transform: rotate(-1.2deg);
+}
+
+/* the slug line: type + freshness, in the margin voice */
+.type {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 3px 8px;
+}
+.freshscore {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.claim .assertion {
+  font-family: var(--font-display);
+  font-size: clamp(16.5px, 2.2vw, 19px);
+  line-height: 1.42;
+  font-weight: 450;
+  margin: 14px 0 6px;
+  color: var(--ink);
+  overflow-wrap: anywhere; /* never let a long unbroken token overflow */
+}
+.claim .assertion.struck {
+  text-decoration: line-through;
+  text-decoration-color: var(--stale);
+  color: var(--ink-3);
+}
+.claim .why {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  color: var(--ink-3);
+  margin: 0 0 10px;
+}
+.claim .explain {
+  font-size: 14.5px;
+  line-height: 1.55;
+  margin: 6px 0;
+  color: var(--ink-2);
+}
+
+/* the time axis: re-dates each claim "as of today" — AsOf's whole promise,
+   made literal. "as written" (the frozen claim) --> the verdict, stamped with
+   today's date, and the live source's own date underneath. */
+.whenline {
+  display: flex;
+  align-items: center;
+  gap: 7px 11px;
+  flex-wrap: wrap;
+  margin: 11px 0 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.whenline .wl-written {
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.whenline .wl-axis {
+  flex: 0 0 auto;
+  position: relative;
+  width: 30px;
+  height: 1.5px;
+  background: repeating-linear-gradient(
+    to right,
+    var(--rule-2) 0 3px,
+    transparent 3px 6px
+  );
+}
+.whenline .wl-axis::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: -2.5px;
+  border-left: 5px solid var(--rule-2);
+  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+}
+.whenline .wl-verdict {
+  font-weight: 600;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.whenline.stale .wl-verdict {
+  color: var(--stale);
+}
+.whenline.fresh .wl-verdict {
+  color: var(--fresh);
+}
+.whenline.unverifiable .wl-verdict {
+  color: var(--unverified);
+}
+.whenline .wl-src {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  color: var(--ink-3);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+/* evidence — a pasted clipping, set off by a rule */
+.evidence {
+  background: var(--inset);
+  border-left: 3px solid var(--rule-2);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 12px 15px;
+  margin-top: 13px;
+}
+.evidence .q {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.evidence .src {
+  margin-top: 9px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.evidence .src a {
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.evidence .src .date {
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.claim .actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 8px;
+  padding-top: 13px;
+  border-top: 1px solid var(--rule);
+}
+
+/* ---------- reviewed answer ---------------------------------------------- */
+.reviewed-panel {
+  margin-top: 16px;
+}
+.reviewed-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 13px;
+  flex-wrap: wrap;
+}
+.reviewed-head strong {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+}
+.reviewed-sub {
+  display: block;
+  color: var(--ink-2);
+  font-size: 13.5px;
+  margin-top: 4px;
+  max-width: 52ch;
+  line-height: 1.5;
+}
+textarea.reviewed {
+  min-height: 188px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  background: var(--inset);
+}
+
+/* the page sign-off line */
+.pagefoot {
+  margin-top: 40px;
+  opacity: 0.7;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+}
+
+/* ---------- footer: the gateway docket ----------------------------------- */
+/* The sponsors, made legible: Bifrost routes every model call, Tavily supplies
+   the dated evidence. Set as a ledger panel so it reads as infrastructure, not
+   a logo strip. */
+.gateway {
+  margin-top: 22px;
+  border: 1.5px solid var(--rule-2);
+  border-radius: var(--radius);
+  background: var(--inset);
+  padding: 15px 17px;
+}
+.gw-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.gw-mark {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.gw-by {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.gw-note {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 9px 0 13px;
+  max-width: 70ch;
+}
+.gw-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.gw-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.03em;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.gw-step {
+  min-width: 64px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+.gw-served {
+  color: var(--ink);
+  border: 1.5px solid var(--rule-2);
+  border-radius: var(--radius);
+  padding: 2px 8px;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.gw-fallback {
+  color: var(--unverified);
+}
+.gw-att {
+  margin-left: auto;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.gw-tavily {
+  margin: 13px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.03em;
+  color: var(--ink-3);
+}
+.gw-tavily strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* loading tick */
+.spin {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 1.5px solid var(--rule-2);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: sp 0.7s linear infinite;
+  vertical-align: -1px;
+}
+
+/* ---------- motion: stamps press, slips settle --------------------------- */
+@keyframes stamp {
+  0% {
+    opacity: 0;
+    transform: rotate(-2.4deg) scale(1.5);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-2.4deg) scale(1);
+  }
+}
+@keyframes slip-in {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(5px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
-}
-.claim .top {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.pill {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 999px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.pill.stale {
-  background: rgba(255, 93, 108, 0.16);
-  color: var(--stale);
-}
-.pill.fresh {
-  background: rgba(48, 208, 144, 0.16);
-  color: var(--fresh);
-}
-.pill.unverifiable {
-  background: rgba(246, 173, 60, 0.16);
-  color: var(--unverified);
-}
-.type {
-  font-size: 11px;
-  color: var(--muted);
-  border: 1px solid var(--border-2);
-  padding: 2px 9px;
-  border-radius: 999px;
-  text-transform: lowercase;
-}
-.claim .assertion {
-  font-size: 15.5px;
-  margin: 11px 0 6px;
-  line-height: 1.5;
-  font-weight: 500;
-}
-.claim .assertion.struck {
-  text-decoration: line-through;
-  color: var(--muted);
-  font-weight: 400;
-}
-.claim .why {
-  color: var(--muted-2);
-  font-size: 12.5px;
-  margin: 0 0 8px;
-}
-.claim .explain {
-  font-size: 14px;
-  line-height: 1.55;
-  margin: 6px 0;
-  color: var(--text);
-}
-.evidence {
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  padding: 11px 13px;
-  margin-top: 11px;
-  font-size: 13px;
-}
-.evidence .q {
-  color: var(--text);
-  font-style: italic;
-  line-height: 1.5;
-}
-.evidence .src {
-  margin-top: 7px;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
-  color: var(--muted);
-}
-.evidence .src .date {
-  color: var(--unverified);
-  font-variant-numeric: tabular-nums;
-  font-weight: 500;
-}
-.claim .actions {
-  margin-top: 13px;
-  display: flex;
-  gap: 8px;
-}
-.freshscore {
-  margin-left: auto;
-  font-size: 12px;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-}
-
-/* ---------- footer / misc ---------- */
-.routes {
-  margin-top: 20px;
-  font-size: 12.5px;
-  color: var(--muted);
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
-  animation: fadeUp 0.5s ease both;
-}
-.routes .gw {
-  border: 1px solid var(--border-2);
-  border-radius: 999px;
-  padding: 4px 11px;
-  background: var(--panel);
-  font-variant-numeric: tabular-nums;
-}
-.note {
-  color: var(--muted);
-  font-size: 12.5px;
-  margin-top: 10px;
-}
-.err {
-  background: rgba(255, 93, 108, 0.1);
-  border: 1px solid rgba(255, 93, 108, 0.4);
-  color: var(--stale);
-  border-radius: 10px;
-  padding: 11px 13px;
-  margin-top: 12px;
-  font-size: 14px;
-}
-.spin {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid rgba(255, 255, 255, 0.35);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: sp 0.7s linear infinite;
 }
 @keyframes sp {
   to {
@@ -643,28 +935,106 @@ textarea.reviewed {
   }
 }
 
-@media (max-width: 560px) {
-  .container {
-    padding: 28px 16px 72px;
-  }
-  .hero h1 {
-    font-size: 36px;
-  }
+/* ---------- craft: micro-interactions ------------------------------------ */
+/* chips lift like index cards you can pick up */
+.chip,
+.btn {
+  transition:
+    color 120ms ease,
+    background 120ms ease,
+    border-color 120ms ease,
+    transform 120ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 120ms ease;
+}
+.chip:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+.btn:not(.primary):hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px -10px oklch(0.2 0.02 60 / 0.6);
+}
+.btn.primary:hover:not(:disabled) {
+  box-shadow: 0 8px 16px -10px oklch(0.2 0.02 60 / 0.5);
+}
+
+/* a wire slip sits up a touch when you read it */
+.claim {
+  transition:
+    box-shadow 160ms ease,
+    transform 160ms ease,
+    opacity 160ms ease;
+}
+.claim:hover:not(.dismissed) {
+  box-shadow: 0 10px 22px -18px oklch(0.2 0.02 60 / 0.55);
+}
+
+/* evidence source link: an editor's underline that fills in on hover */
+.evidence .src a {
+  text-decoration-color: var(--accent);
+}
+
+/* ---------- responsive ----------------------------------------------------
+   Type and gutters scale fluidly via clamp() above, so these breakpoints only
+   reflow layout: the docket stacks, and the tightest phones ease their spacing.
+   --------------------------------------------------------------------------- */
+
+/* docket: stack the gauge + verdict over the counts once it gets snug */
+@media (max-width: 720px) {
   .overall {
     flex-wrap: wrap;
+    gap: 18px;
+    padding: 20px;
   }
   .counts {
     margin-left: 0;
+    border-left: 0;
+    padding-left: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 14px 20px;
     width: 100%;
-    margin-top: 4px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+  }
+  .freshscore {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* phones: let the masthead badge/toggle and claim slug line breathe */
+@media (max-width: 440px) {
+  .hero-top {
+    gap: 10px 12px;
+  }
+  .theme-toggle {
+    margin-left: auto;
+  }
+  .claim .top {
+    gap: 8px 10px;
+  }
+  .claim .actions .btn {
+    flex: 1 1 auto; /* Keep / Dismiss fill the row evenly */
+  }
+}
+
+/* very small phones (≈320px): drop the gauge beside a full-width verdict */
+@media (max-width: 360px) {
+  .overall {
+    gap: 14px;
+  }
+  .dial {
+    width: 88px;
+    height: 88px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   *,
+  .pill,
   .claim,
-  .overall,
-  .routes {
+  .overall {
     animation: none !important;
+    transition: none !important;
   }
 }

@@ -26,6 +26,13 @@ PLAN.md
 CLAIMS.md
 CHECKLIST.md
 CLAUDE.md
+COMPETITION.md
+DESIGN.md
+SHIP.md
+submission.md
+demo-inputs.md
 .claude/
 ship/
 video-script.md
+.vercel
+.env*
