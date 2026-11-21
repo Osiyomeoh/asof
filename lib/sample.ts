@@ -3,7 +3,7 @@ import type { AnalysisResult, ClaimResult } from "./types";
 
 /**
  * Sample mode: a fixed snapshot of a REAL AsOf run (Bifrost gateway + Tavily live
- * web search, captured 20 Nov 2026), frozen so the demo always works with zero keys
+ * web search, captured 21 Nov 2026), frozen so the demo always works with zero keys
  * and zero network — judges can click one button and see the full experience even if
  * a free-tier provider is rate-limiting. Every verdict, score, explanation and source
  * below came from that live run; dates are normalised to ISO for display, and each
@@ -32,19 +32,19 @@ const claims: ClaimResult[] = [
     verdict: "stale",
     freshnessScore: 0,
     explanation:
-      "Gemini 3 is available as Google's latest and most intelligent model as of late 2025/2026, superseding Gemini 2.0 Flash.",
+      "As of November 2026, Google's flagship is the Gemini 4 family (gemini-4-carbon / gemini-4-neon), several generations past Gemini 2.0 Flash.",
     evidenceQuote:
-      "Gemini 3 is our most intelligent model yet, now available to everyone in the Gemini app.",
-    sourceUrl: "https://gemini.google/release-notes",
-    sourceDate: "2026-11-19",
+      "Use gemini-4-carbon or gemini-4-neon for deep frontier reasoning, or pick a specialized model below.",
+    sourceUrl: "https://aistudio.google.com/docs/latest-model",
+    sourceDate: "2026-11-21",
     sources: [
       {
-        title: "Latest AI updates and improvements in the Gemini apps",
-        url: "https://gemini.google/release-notes",
+        title: "Gemini API — latest models | Google AI for Developers",
+        url: "https://aistudio.google.com/docs/latest-model",
         content:
-          "2025.11.18 — Gemini 3 is our most intelligent model yet, now available to everyone in the Gemini app.",
-        publishedDate: "2026-11-19",
-        score: 0.59,
+          "Use gemini-4-carbon or gemini-4-neon for deep frontier reasoning. Gemini 4 Carbon is our strongest reasoning model for agentic coding, multimodal precision, and scientific and security reasoning.",
+        publishedDate: "2026-11-21",
+        score: 0.61,
       },
       {
         title: "Learn about supported models | Firebase AI Logic",
@@ -230,7 +230,7 @@ export function getSampleResult(input?: string): AnalysisResult {
     ],
     createdAt: new Date().toISOString(),
     notes: [
-      "Sample mode: a frozen snapshot of a real AsOf run (Bifrost + Tavily, 20 Nov 2026), shown so the demo runs with zero keys.",
+      "Sample mode: a frozen snapshot of a real AsOf run (Bifrost + Tavily, 21 Nov 2026), shown so the demo runs with zero keys.",
     ],
   };
 }
